@@ -10,7 +10,7 @@ const authController = {
             
             const alreadyExist = await Auth.findOne({ userName });
             if (alreadyExist) {
-                return res.status(400).json({ message: "Account Already Exists" });
+                return res.status(400).json({ message: "Account Already Exists! Please Login" });
             }
 
             const hashedPassword = await bcrypt.hash(passWord, 10);
@@ -22,7 +22,7 @@ const authController = {
             });
 
             const savedUser = await newUser.save();
-           res.status(201).json({Message: "User Registered Successfully", user: savedUser});
+           res.status(201).json({Message: "Account Registered Successfully! Please Login"});
         }
         catch (error){
             res.status(500).json({ message: "Error registering user", error: error.message });
@@ -39,7 +39,7 @@ const authController = {
 
             const loggedUser = await bcrypt.compare(passWord, user.passWord);
             if (!loggedUser) {
-                return res.status(400).json({ message: "Password is Incorret!!" });
+                return res.status(400).json({ message: "incorrect Password!!" });
             }
 
             const Token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
@@ -48,14 +48,30 @@ const authController = {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
+                sameSite: "Lax"
             });
 
-            res.status(200).json({ message: "User Logged in Successfully", user});
+            res.status(200).json({ message: "login Successfull!", user});
         }
         catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
         }
-    }, 
+    },
+    
+    me: async (req, res) => {
+        try {
+            const userid = req.userID;
+            
+            const user = await Auth.findById(userid);
+            console.log(user);
+            return res.status(200).json({ user: user });
+
+
+        }
+        catch (error) {
+            return res.status(500).json({ Message: "Error found on Login!!" });
+        }
+    },
     logoutUser: async (req, res) => { 
         try {
             res.clearCookie("token", {
@@ -63,10 +79,32 @@ const authController = {
                 secure: process.env.NODE_ENV === "production",
                 sameSite: "strict",
             });
-            res.status(200).json({ message: "User Logged out Successfully" });
+            res.status(200).json({ message: "Logged out Successfully" });
         }
         catch (error) {
             res.status(500).json({ message: "Error logging out user", error: error.message });
+        }
+    }, 
+    updatePassword: async (req, res) => {
+        try {
+            const {userName, newPassword, confirmPassword } = req.body;
+
+            const user = await Auth.findOne({userName});
+            if (!user) {
+                return res.status(404).json({ message: "User not found" });
+            }
+
+            if (newPassword !== confirmPassword) {
+                return res.status(400).json({ message: "Passwords do not match" });
+            }
+
+            const hashedPassword = await bcrypt.hash(newPassword, 10);
+            user.passWord = hashedPassword;
+            await user.save();
+
+            res.status(200).json({ message: "Password updated successfully" });
+        } catch (error) {
+            res.status(500).json({ message: "Error updating password", error: error.message });
         }
     }
 }
