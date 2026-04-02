@@ -27,6 +27,16 @@ const userScheema = new mongoose.Schema({
 coverPic: {
   type: String,
   default: ""
+  }, bio: {
+  type: String,
+  default: ""
+  }, 
+  location: {
+    type: String,
+    default: ""
+}, website: {
+    type: String,
+    default: ""
 }
 });
 

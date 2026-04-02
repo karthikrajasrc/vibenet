@@ -121,12 +121,31 @@ const requestController = {
   }, getFriends: async (req, res) => {
     try {
         const userId = req.userID;
-        const user = await Auth.findById(userId).populate("friends", "userName profilePic");
+        const user = await Auth.findById(userId).populate("friends", "userName profilePic name coverPic");
 
         return res.status(200).json({ friends: user.friends });
     }
     catch (error) {
         res.status(500).json({ message: "Error getting friends", error: error.message });
+    }
+}, updateProfile: async (req, res) => {
+    try {
+        const userId = req.userID;
+        const { name, bio, location, website } = req.body;
+
+        const user = await Auth.findById(userId);
+
+        user.name = name;
+        user.bio = bio;
+        user.location = location;
+        user.website = website;
+
+        await user.save();
+
+        return res.status(200).json({ message: "Profile updated successfully" });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error updating profile", error: error.message });
     }
 }
 };
