@@ -95,7 +95,7 @@ const Sidebar = () => {
     </div>
   </div>
 
-  <div className="ml-60 w-full h-screen overflow-y-auto p-10">
+  <div className="ml-60 w-[calc(100%-240px)] min-h-screen overflow-y-auto p-10">
     <Outlet />
   </div>
 
