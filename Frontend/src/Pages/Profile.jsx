@@ -8,6 +8,8 @@ import instance from "../ProtectedInstances/axios";
 import Cropper from "react-easy-crop";
 import { faSignalMessenger } from "@fortawesome/free-brands-svg-icons";
 import toast from "react-hot-toast";
+import { faTrashCan } from "@fortawesome/free-regular-svg-icons";
+import { Link } from "react-router";
 
 const Profile = () => {
    const { user, setUser } = useContext(AuthContext);
@@ -196,7 +198,19 @@ const handleupdateCover = async () => {
         }
 
         fetchPosts();
-    }, []);
+  }, []);
+  
+  const handleDeletepost = async (id) => {
+    try {
+      const res = await instance.delete(`create-post/delete/${id}`);
+      toast.success(res.data.message);
+      const updatedPosts = posts.filter((post) => post._id !== id);
+      setPosts(updatedPosts);
+    }
+    catch (error) {
+      console.log(error);
+    }
+  }
   
   return (
     <div>
@@ -251,7 +265,7 @@ const handleupdateCover = async () => {
       image={imageSrc}
       crop={crop}
       zoom={zoom}
-      aspect={1} // profile pic ku square
+      aspect={1} 
       onCropChange={setCrop}
       onZoomChange={setZoom}
       onCropComplete={onCropComplete}
@@ -302,7 +316,7 @@ const handleupdateCover = async () => {
                               </div>
                               <div className="flex gap-5">
                           <div className="relative group">
-                            <button className="cursor-pointer"><span className="text-white text-2xl"><FontAwesomeIcon icon={faPaperPlane} /></span></button>
+                            <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white text-2xl"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
                             <span className="absolute left-0 -top-3.5 -translate-y-1/2 bg-white text-black text-sm px-2 py-1 rounded 
   opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap">
     Message
@@ -327,15 +341,19 @@ const handleupdateCover = async () => {
                               <div className="flex items-center mb-4 px-5 mx-5 py-1 border border-gray-400 rounded-2xl  bg-gray-900 relative">
                                 <img src={selectedFriend.coverPic || nocover} alt="Cover Image" className="h-20 w-120 bg-white rounded-2xl" />
                                 <img src={selectedFriend.profilePic || userimage} alt="Friend Image" className="h-18 w-18 rounded-full mr-5 absolute top-15 ml-5" />
-                                          <div className="flex justify-between items-center w-full">
+                                          <div className="flex justify-evenly items-center w-full">
                                               <div className="ml-2">
-                                                  <h3 className=" font-semibold text-xl text-white">{selectedFriend.userName}</h3>
-                                                  <p className="text-gray-500 text-md">{selectedFriend.name}</p>
-                                              </div>
+                                                  <h3 className=" font-semibold text-2xl text-white">{selectedFriend.userName}</h3>
+                                    <p className="text-gray-500 text-md">{selectedFriend.name}</p>
+                                    
+                                  </div>
+                                  <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white text-2xl"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
                                           </div>
                               </div>
-                              <div className="bg-black/30">
-                                <h2 className="text-black">Location: <span>{selectedFriend.location || "No Location"}</span></h2>
+                              <div className="bg-black/30 mt-15 rounded-2xl flex flex-col p-5">
+                                <h2 className="text-black">Bio: <span className="font-semibold text-[22px]">{selectedFriend.bio || "No Bio"}</span></h2>
+                                <h2 className="text-black">Location: <span className="font-semibold text-[22px]">{selectedFriend.location || "No Location"}</span></h2>
+                                <h2>Website: <span className="font-semibold text-[22px]">{selectedFriend.website || "No Website"}</span></h2>
                               </div>
                                   </div>
                               </div>
@@ -347,37 +365,30 @@ const handleupdateCover = async () => {
       </div>
       <div className="mt-10">
         <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text mb-3 text-transparent font-semibold text-3xl">Posts</h2>
-        <div>
+        <div className="grid grid-cols-3 gap-2 px-2">
                       {
                           posts.map((post) => (
-          <div key={post._id} className="mt-15 ml-20">
-            <div className="flex items-center gap-3">
-              <img 
-                src={post.userId?.profilePic || userimage} 
-                className="h-12 w-12 rounded-full border-2 border-[#EA5415]"
-              />
-        
-              <h3 className="text-white font-semibold">
-                {post.userId?.userName}
-              </h3>
-            </div>
-                                  <div className="bg-gray-900 max-w-xl flex flex-col justify-center items-center rounded-3xl mt-3">
+          <div key={post._id} className="mt-10 ml-20">
+                              <div className="bg-gray-900 max-w-xl flex flex-col justify-center items-center rounded-3xl mt-3 h-full">
+                                <div className="flex justify-end right-0">
+                                  <button className="text-white text-lg" onClick={() => handleDeletepost(post._id)}><FontAwesomeIcon icon={faTrashCan} /> </button>
+                                </div>
                                       {post.text && (
-              <p className="text-white font-semibold mt-2">
+              <p className="text-white font-semibold mt-2 px-5 py-10">
                 {post.text}
               </p>
             )}
             {post.image && (
               <img 
                 src={post.image} 
-                className="h-100 w-80 rounded-md mt-2"
+                className="h-50 w-50 rounded-md mt-2"
               />
             )}
             {post.video && (
               <video 
                 src={post.video} 
                 controls 
-                className="h-100 w-150 rounded-md mt-2"
+                className="h-50 w-90 rounded-md mt-2"
               />
                                       )}
                                   </div>

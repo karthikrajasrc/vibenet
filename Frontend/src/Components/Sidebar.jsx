@@ -1,6 +1,6 @@
 import { NavLink, Outlet, useNavigate } from "react-router"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faHeart, faHome, faPlus, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
+import { faBell, faHeart, faHome, faPaperPlane, faPlus, faSearch, faUser } from "@fortawesome/free-solid-svg-icons";
 import { useContext } from "react";
 import { AuthContext } from "../../authProvider";
 import instance from "../ProtectedInstances/axios";
@@ -53,13 +53,24 @@ const Sidebar = () => {
     </li>
   )}
 </NavLink>
-                      
-<NavLink to="/home/search">
+
+<NavLink to="/home/message">
   {({ isActive }) => (
     <li className={`flex gap-3 items-center cursor-pointer text-xl mt-5
       ${isActive ? "text-orange-400" : "text-white hover:text-orange-400"}`}>
       
-      <FontAwesomeIcon icon={faSearch} /> Search
+      <FontAwesomeIcon icon={faPaperPlane} /> Message
+    </li>
+  )}
+</NavLink>
+            
+
+<NavLink to="/home/request">
+  {({ isActive }) => (
+    <li className={`flex gap-3 items-center cursor-pointer text-xl mt-5
+      ${isActive ? "text-orange-400" : "text-white hover:text-orange-400"}`}>
+      
+      <FontAwesomeIcon icon={faSearch} /> Request
     </li>
   )}
 </NavLink>
@@ -69,7 +80,7 @@ const Sidebar = () => {
     <li className={`flex gap-3 items-center cursor-pointer text-xl mt-5
       ${isActive ? "text-orange-400" : "text-white hover:text-orange-400"}`}>
       
-      <FontAwesomeIcon icon={faHeart} /> Notifications
+      <FontAwesomeIcon icon={faBell} /> Notifications
     </li>
   )}
 </NavLink>

@@ -128,26 +128,47 @@ const requestController = {
     catch (error) {
         res.status(500).json({ message: "Error getting friends", error: error.message });
     }
-}, updateProfile: async (req, res) => {
+  }, updateProfile: async (req, res) => {
     try {
-        const userId = req.userID;
-        const { name, bio, location, website } = req.body;
+      const userId = req.userID;
+      const { name, bio, location, website } = req.body;
 
-        const user = await Auth.findById(userId);
+      const user = await Auth.findById(userId);
 
-        user.name = name;
-        user.bio = bio;
-        user.location = location;
-        user.website = website;
+      user.name = name;
+      user.bio = bio;
+      user.location = location;
+      user.website = website;
 
-        await user.save();
+      await user.save();
 
-        return res.status(200).json({ message: "Profile updated successfully" });
+      return res.status(200).json({ message: "Profile updated successfully" });
     }
     catch (error) {
-        res.status(500).json({ message: "Error updating profile", error: error.message });
+      res.status(500).json({ message: "Error updating profile", error: error.message });
     }
-}
+  },
+getAllUsers: async (req, res) => {
+    try {
+        const users = await Auth.find().select("userName profilePic name coverPic");
+        return res.status(200).json({ users });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error getting users", error: error.message });
+    }
+  }, 
+
+  getReceivedRequests: async (req, res) => {
+    try {
+        const userId = req.userID;
+        const user = await Auth.findById(userId).populate("friendRequests.from", "userName profilePic name coverPic");
+
+        return res.status(200).json({ requests: user.friendRequests });
+    }
+    catch (error) {
+        res.status(500).json({ message: "Error getting received requests", error: error.message });
+    }
+  }
 };
 
 module.exports = requestController;

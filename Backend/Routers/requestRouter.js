@@ -1,5 +1,5 @@
 const express = require("express");
-const { sendRequest, AcceptRequest, RejectRequest, uploadProfile, getFriends, updateProfile } = require("../Controllers/requestController");
+const { sendRequest, AcceptRequest, RejectRequest, uploadProfile, getFriends, updateProfile, getAllUsers, getReceivedRequests } = require("../Controllers/requestController");
 const { isAuthenticated } = require("../Middlewares/auth");
 const upload = require("../Middlewares/upload");
 const requestRouter = express.Router();
@@ -15,4 +15,7 @@ requestRouter.post("/upload-profile", isAuthenticated,
 
 requestRouter.get("/friends", isAuthenticated, getFriends);
 requestRouter.put("/update-profile", isAuthenticated, updateProfile);
+requestRouter.get("/allusers", isAuthenticated, getAllUsers);
+requestRouter.get("/received-requests", isAuthenticated, getReceivedRequests);
+
 module.exports = requestRouter;

@@ -10,7 +10,9 @@ import Sidebar from "./Components/Sidebar";
 import Profile from "./Pages/Profile";
 import Notification from "./Pages/Notification";
 import Newpost from "./Pages/Newpost";
-import Search from "./Pages/Search";
+import Search from "./Pages/Request";
+import Request from "./Pages/Request";
+import Message from "./Pages/Message";
 
 
 
@@ -43,8 +45,11 @@ const App = () => {
               path: "newpost",
               element: <Newpost />
             }, {
-              path: "search",
-              element: <Search />
+              path: "request",
+              element: <Request />
+            }, {
+              path: "message",
+              element: <Message />
             }
           ]
         }

@@ -14,7 +14,26 @@ const postSchema = new mongoose.Schema({
     },
     video: {
         type: String,
+    }, 
+    likes: [
+  {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "Auth"
+  }
+],
+    comment: [
+  {
+    userId: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "Auth"
+    },
+    text: String,
+    createdAt: {
+      type: Date,
+      default: Date.now
     }
+  }
+]
 }, { timestamps: true });
 
 module.exports = mongoose.model("Post", postSchema, "Posts");

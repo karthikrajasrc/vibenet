@@ -3,6 +3,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { useState } from "react";
 import instance from "../ProtectedInstances/axios";
 import toast from "react-hot-toast";
+import Cropper from "react-easy-crop";
 
 const Newpost = () => {
 
@@ -14,6 +15,11 @@ const Newpost = () => {
     const [text, settext] = useState("");
     const [image, setimage] = useState(null);
     const [video, setvideo] = useState(null);
+
+    const [crop, setCrop] = useState({ x: 0, y: 0 });
+const [zoom, setZoom] = useState(1);
+const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
+    const [imageSrc, setImageSrc] = useState(null);
 
     const handleaddpost = async() => {
         try {
@@ -30,29 +36,46 @@ const Newpost = () => {
     }
     }
 
-    const handleaddimagepost = async () => {
-        try {
-            setLoading(true);
-            const formData = new FormData();
-            formData.append("postPic", image);
+   const handleaddimagepost = async () => {
+  try {
+    setLoading(true);
 
-            const res = await instance.post("create-post/newpost", formData,
-            {
-                headers: {
-                    "Content-Type": "multipart/form-data"
-                }
-            });
-            toast.success(res.data.message);
-            setimage(null);
-            setshowimagepost(false);
-        }
-        catch (error) {
-            toast.error(error.response.data.message);
-        }finally {
-        setLoading(false); 
-    }
+    let finalImage = image;
+
+    // 👉 if crop pannirundha
+    if (imageSrc && croppedAreaPixels) {
+      const croppedBlob = await getCroppedImg(imageSrc, croppedAreaPixels);
+
+      // convert blob to file
+      finalImage = new File([croppedBlob], "cropped.jpg", {
+        type: "image/jpeg",
+      });
     }
 
+    const formData = new FormData();
+    formData.append("postPic", finalImage);
+
+    const res = await instance.post(
+      "create-post/newpost",
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    toast.success(res.data.message);
+
+    setimage(null);
+    setImageSrc(null);
+    setshowimagepost(false);
+  } catch (error) {
+    toast.error(error.response?.data?.message || "Error");
+  } finally {
+    setLoading(false);
+  }
+};
     const handleaddvideopost = async () => {
         try {
              setLoading(true);
@@ -73,6 +96,53 @@ const Newpost = () => {
         setLoading(false); 
     }
     }
+
+       const handleprofileChange = (e) => {
+  const file = e.target.files[0];
+  setimage(file);
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    setImageSrc(reader.result);
+  };
+  reader.readAsDataURL(file);
+    };
+
+        const onCropComplete = (croppedArea, croppedAreaPixels) => {
+  setCroppedAreaPixels(croppedAreaPixels);
+};
+
+    const getCroppedImg = async (imageSrc, crop) => {
+  const image = new Image();
+  image.src = imageSrc;
+
+  await new Promise((resolve) => (image.onload = resolve));
+
+  const canvas = document.createElement("canvas");
+  const ctx = canvas.getContext("2d");
+
+  canvas.width = crop.width;
+  canvas.height = crop.height;
+
+  ctx.drawImage(
+    image,
+    crop.x,
+    crop.y,
+    crop.width,
+    crop.height,
+    0,
+    0,
+    crop.width,
+    crop.height
+  );
+
+  return new Promise((resolve) => {
+    canvas.toBlob((blob) => {
+      resolve(blob);
+    }, "image/jpeg");
+  });
+    };
+
 
   return (
       <>
@@ -124,8 +194,21 @@ const Newpost = () => {
                           <h1 className="text-black text-2xl font-semibold">Add a Photo for Post!</h1>
                           <div className="flex flex-col">
                               <div className="flex flex-col mt-15">
-                                  <input type="file" accept="image" className="border border-gray-300 px-2 py-1 rounded-2xl"  onChange={e => setimage(e.target.files[0])}/>
+                                  <input type="file" accept="image" className="border border-gray-300 px-2 py-1 rounded-2xl"  onChange={handleprofileChange}/>
                               </div>
+                              {imageSrc && (
+  <div className="relative w-75 h-75 mt-4">
+    <Cropper
+      image={imageSrc}
+      crop={crop}
+      zoom={zoom}
+      aspect={1} 
+      onCropChange={setCrop}
+      onZoomChange={setZoom}
+      onCropComplete={onCropComplete}
+    />
+  </div>
+)}
                           </div>
                       </div>
                       <div className="flex justify-end mt-4">
@@ -156,7 +239,7 @@ const Newpost = () => {
               </div>
           }
         {loading && (
-  <div className="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 backdrop-blur-sm">
+  <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
     
     <div className="flex flex-col items-center gap-4">
       
