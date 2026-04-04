@@ -8,6 +8,8 @@ const { Server } = require("socket.io");
 const server = http.createServer(app);
 const users = {};
 
+const Message = require("./Models/messageModel");
+
 const io = new Server(server, {
   cors: {
     origin: "http://localhost:5173",
@@ -23,6 +25,18 @@ io.on("connection", (socket) => {
   socket.on("userOnline", (userId) => {
     users[userId] = socket.id;
   });
+
+  socket.on("sendMessage", async ({ senderId, receiverId, text }) => {
+
+  const newMessage = new Message({ senderId, receiverId, text });
+  const savedMessage = await newMessage.save();
+
+  const receiverSocketId = users[receiverId];
+
+  if (receiverSocketId) {
+    io.to(receiverSocketId).emit("getMessage", savedMessage);
+  }
+});
 
   socket.on("disconnect", () => {
     for (let id in users) {

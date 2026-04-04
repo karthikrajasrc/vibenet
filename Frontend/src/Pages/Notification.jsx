@@ -47,7 +47,8 @@ useEffect(() => {
   }
     }, [user]);
     
-    console.log(notifications);
+  console.log(notifications);
+  
   return (
       <>
           <h1 className="text-white text-2xl mt-2 mb-10"> <span><FontAwesomeIcon icon={faBell} /> </span>Notifications</h1>
@@ -56,12 +57,19 @@ useEffect(() => {
     <div key={index} className="flex items-center gap-3 bg-gray-800 text-white p-3 my-2 rounded-lg">
       
       <img 
-        src={n.senderId.profilePic || userimage} 
-        className="h-10 w-10 rounded-full border-2 border-[#EA5415]"
-      />
-      <p>
-        <span className="font-semibold text-2xl">{n.senderId.userName} &nbsp; </span> liked your post ❤️
-      </p>
+  src={n.senderId?.profilePic || n.profilePic || userimage} 
+  className="h-10 w-10 rounded-full border-2 border-[#EA5415]"
+/>
+
+<p>
+  <span className="font-semibold">
+    {n.senderId?.userName}
+  </span>{" "}
+
+  {n.type === "comment" && "commented on your post 💬"}
+  {n.type === "like" && "liked your post ❤️"}
+  {n.type === "friend_request" && "sent you a friend request 🤝"}
+</p>
 
     </div>
   ))}

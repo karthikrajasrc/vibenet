@@ -30,7 +30,15 @@ const Profile = () => {
 const [zoom, setZoom] = useState(1);
 const [croppedAreaPixels, setCroppedAreaPixels] = useState(null);
     const [imageSrc, setImageSrc] = useState(null);
-    const [friends, setfriends] = useState([]);
+  const [friends, setfriends] = useState([]);
+  const [showUpdatePost, setShowUpdatePost] = useState(false);
+  const [selectedPost, setSelectedPost] = useState(null);
+  const [updatePost, setUpdatePost] = useState("");
+  const [updateFile, setUpdateFile] = useState(null);
+  const [updateVideo, setUpdateVideo] = useState(null);
+  const [loading, setLoading] = useState(false);
+  const [updateImageSrc, setUpdateImageSrc] = useState(null);
+const [cropMode, setCropMode] = useState(false);
 
    
 
@@ -202,7 +210,7 @@ const handleupdateCover = async () => {
   
   const handleDeletepost = async (id) => {
     try {
-      const res = await instance.delete(`create-post/delete/${id}`);
+      const res = await instance.delete(`/create-post/delete/${id}`);
       toast.success(res.data.message);
       const updatedPosts = posts.filter((post) => post._id !== id);
       setPosts(updatedPosts);
@@ -211,7 +219,81 @@ const handleupdateCover = async () => {
       console.log(error);
     }
   }
+  console.log(selectedPost);
+
+
+const handlePostUpdate = async (id) => {
+  try {
+    setLoading(true);
+    const formData = new FormData();
+
+    if (updatePost) {
+      formData.append("text", updatePost);
+    }
+
+    if (updateFile) {
+      formData.append("postPic", updateFile);
+    }
+
+    if (updateVideo) {
+      formData.append("postVideo", updateVideo);
+    }
+
+    const res = await instance.put(
+      `/create-post/update/${id}`,
+      formData
+    );
+
+    setPosts((prevPosts) =>
+  prevPosts.map((post) => {
+    if (post._id === id) {
+      return {
+        ...res.data.updatedPost,
+        image: res.data.updatedPost.image
+          ? res.data.updatedPost.image + "?t=" + Date.now()
+          : null
+      };
+    }
+    return post;
+  })
+);
+
+    toast.success(res.data.message);
+
+    setShowUpdatePost(false);
+
+  } catch (error) {
+    console.log(error);
+  }finally {
+    setLoading(false);
+     setUpdateFile(null);  
+  setUpdateVideo(null); 
+  }
+  };
   
+  const handleUpdateImageChange = (e) => {
+  const file = e.target.files[0];
+
+  const reader = new FileReader();
+  reader.onload = () => {
+    setUpdateImageSrc(reader.result);
+    setCropMode(true); // 🔥 open crop UI
+  };
+  reader.readAsDataURL(file);
+  };
+  
+ const handleCropConfirm = async () => {
+  const croppedBlob = await getCroppedImg(updateImageSrc, croppedAreaPixels);
+
+  const file = new File([croppedBlob], "cropped.jpg", {
+    type: "image/jpeg",
+  });
+
+  setUpdateFile(file); // 🔥 IMPORTANT
+  setCropMode(false);
+};
+  
+
   return (
     <div>
           <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold text-3xl ml-10 mb-4 ">{user.userName}</h1>
@@ -246,6 +328,22 @@ const handleupdateCover = async () => {
                   </div>
               )
         }
+
+        {loading && (
+  <div className="fixed inset-0 z-100 flex items-center justify-center bg-black/60 backdrop-blur-sm">
+    
+    <div className="flex flex-col items-center gap-4">
+      
+      <div className="w-12 h-12 border-4 border-orange-500 border-t-transparent rounded-full animate-spin"></div>
+      
+      <p className="text-white text-lg font-semibold">
+        Uploading... 🚀
+      </p>
+
+    </div>
+
+  </div>
+)}
               
 
               <img src={user.profilePic || userimage} alt="User Image" className="absolute top-20 h-30 w-30 rounded-full ml-15 border-gray-400 border shadow-3xl" />
@@ -371,6 +469,81 @@ const handleupdateCover = async () => {
           <div key={post._id} className="mt-10 ml-20">
                               <div className="bg-gray-900 max-w-xl flex flex-col justify-center items-center rounded-3xl mt-3 h-full">
                                 <div className="flex justify-end right-0">
+                                  <button className="text-white text-lg" onClick={() => { setShowUpdatePost(true); setSelectedPost(post); setUpdateFile(null);   
+  setUpdateVideo(null);  
+  setUpdatePost("");}}><FontAwesomeIcon icon={faPen} /> </button>
+                                  
+                                  {
+                                    showUpdatePost && (
+                                      <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
+                                        <div className="bg-white rounded-lg p-8">
+                                          <div className="flex justify-end">
+                                            <span onClick={() => setShowUpdatePost(false)} className="text-black text-2xl pb-3 cursor-pointer"><FontAwesomeIcon icon={faTimes} /></span>
+                                          </div>
+                                          {
+                                            selectedPost.video ? (
+                                              <>
+                                              <input type="file" accept="video/*" className="border border-gray-400 rounded-2xl py-2 px-4 w-full mb-4" onChange={(e) => setUpdateVideo(e.target.files[0])}/>
+                                                <button onClick={() => handlePostUpdate(selectedPost._id)} className="border px-1 rounded-lg text-center">Update Post</button>
+                                              </>
+                                            ) : (
+                                              selectedPost.image ? (
+                                                  <>
+  <input 
+    type="file" 
+    accept="image/*"
+                                                      onChange={handleUpdateImageChange}
+                                                      lassName="border border-gray-400 rounded-2xl py-2 px-4 w-full mb-4"
+  />
+
+  {cropMode && (
+    <div className="relative w-80 h-80 mt-4">
+      <Cropper
+        image={updateImageSrc}
+        crop={crop}
+        zoom={zoom}
+        aspect={1}
+        onCropChange={setCrop}
+        onZoomChange={setZoom}
+        onCropComplete={onCropComplete}
+      />
+
+      <button 
+        onClick={handleCropConfirm}
+        className="mt-3 border px-3 py-1 rounded-lg relative bottom-15 left-45"
+      >
+        Crop Image ✅
+      </button>
+    </div>
+  )}
+
+                                                    {
+                                                      !cropMode && (
+                                                        <button 
+    onClick={() => handlePostUpdate(selectedPost._id)} 
+    className="border px-3 py-1 rounded-lg mt-3"
+  >
+    Update Post
+  </button>
+              )
+                                                    }
+                                                    </>
+                                              ) : (
+                                                    <>
+                                                    <textarea
+  value={updatePost}
+  onChange={(e) => setUpdatePost(e.target.value)}
+  className="border w-full p-2 mb-3"
+                                                    />
+                                                      <button onClick={() => handlePostUpdate(selectedPost._id)} className="border px-1 rounded-lg text-center">Update Post</button>
+                                                    </>
+                                            )
+                                            )
+                                          }
+                                        </div>
+                                      </div>
+                                    )
+                                  }
                                   <button className="text-white text-lg" onClick={() => handleDeletepost(post._id)}><FontAwesomeIcon icon={faTrashCan} /> </button>
                                 </div>
                                       {post.text && (

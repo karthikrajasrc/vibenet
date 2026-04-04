@@ -4,6 +4,7 @@ import { AuthContext } from "../../authProvider";
 import instance from "../ProtectedInstances/axios";
 import toast from "react-hot-toast";
 import logo from "../Images/plainbdlogo.svg"
+import userimage from "../Images/userimage.svg"
 
 const Navbar = () => {
 
@@ -40,12 +41,7 @@ const Navbar = () => {
     </div>
 
     <div className="flex-1 flex justify-center">
-      <button
-        onClick={handleLogout}
-        className="border border-amber-400 text-lg bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent px-4 py-1 rounded-2xl font-semibold"
-      >
-        profile
-      </button>
+      <img src={user ? user.profilePic : userimage} alt="profile" className="h-12 w-12 rounded-full" />
     </div>
 
   </div>

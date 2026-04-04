@@ -45,12 +45,28 @@ const postController = {
             }
 
             post.text = text || post.text;
-            post.image = postPic || post.image;
-            post.video = postVideo || post.video;
 
-            await post.save();
+           if (postPic) {
+  post.image = postPic;   // 🔥 force update
+}
 
-            return res.status(200).json({ message: "Post updated successfully" });
+if (postVideo) {
+  post.video = postVideo;
+}
+
+await post.save();
+
+
+          const updatedPost = await Post.findById(postId);
+          
+          if (updatedPost.image) {
+  updatedPost.image = updatedPost.image + "?t=" + Date.now();
+}
+
+return res.status(200).json({
+  message: "Post updated successfully",
+  updatedPost
+});
         }
         catch (error) {
             res.status(500).json({ message: "Error updating post", error: error.message });
@@ -145,12 +161,15 @@ if (post.likes.includes(userId)) {
 
   if (receiverSocket) {
     global.io.to(receiverSocket).emit("notification", {
-      _id: newNotification._id,
-      userName: liker.userName,
-      profilePic: liker.profilePic,
-      message: `${liker.userName} liked your post ❤️`,
-      createdAt: newNotification.createdAt
-    });
+  _id: newNotification._id,
+  senderId: {
+    userName: liker.userName,
+    profilePic: liker.profilePic
+  },
+  type: "like", 
+  message: `${liker.userName} liked your post ❤️`,
+  createdAt: newNotification.createdAt
+});
   }
 }
 
@@ -183,6 +202,7 @@ if (post.likes.includes(userId)) {
     const newComment = {
       userId,
       text,
+      likes: [],
       createdAt: new Date()
     };
 
@@ -212,13 +232,15 @@ if (post.likes.includes(userId)) {
       const receiverSocket = global.users[receiverId];
 
       if (receiverSocket) {
-        global.io.to(receiverSocket).emit("notification", {
-          _id: newNotification._id,
-          userName: commenter.userName,
-          profilePic: commenter.profilePic,
-          message: `${commenter.userName} commented on your post 💬`,
-          createdAt: newNotification.createdAt
-        });
+       global.io.to(receiverSocket).emit("notification", {
+  _id: newNotification._id,
+  senderId: {
+    userName: commenter.userName,
+    profilePic: commenter.profilePic
+  },
+  message: "commented on your post 💬",
+  createdAt: newNotification.createdAt
+});
       }
     }
 
@@ -227,7 +249,36 @@ if (post.likes.includes(userId)) {
   } catch (error) {
     res.status(500).json({ message: "Error commenting", error: error.message });
   }
-    }, getComments: async (req, res) => {
+  },
+  likeComment: async (req, res) => {
+  try {
+    const userId = req.userID;
+    const { postId, commentId } = req.params;
+
+    const post = await Post.findById(postId);
+
+    const comment = post.comment.find(
+      (c) => c._id.toString() === commentId
+    );
+
+    if (!comment.likes) comment.likes = [];
+
+    if (comment.likes.includes(userId)) {
+      comment.likes = comment.likes.filter(id => id.toString() !== userId);
+    } else {
+      comment.likes.push(userId);
+    }
+
+    await post.save();
+
+    return res.status(200).json({ message: "Comment liked" });
+
+  } catch (error) {
+    res.status(500).json({ message: error.message });
+  }
+}
+  
+  ,getComments: async (req, res) => {
   try {
     const postId = req.params.id;
 
@@ -310,6 +361,23 @@ if (post.likes.includes(userId)) {
     return res.status(200).json({ message: "Comment updated successfully"});
   } catch (error) {
     res.status(500).json({ message: "Error updating comment", error: error.message });
+  }
+  }, 
+    getLikedusers: async (req, res) => {
+  try {
+    const postId = req.params.id;
+    const post = await Post.findById(postId);
+
+    if (!post) {
+      return res.status(404).json({ message: "Post not found" });
+    }
+
+    const likedUsers = await User.find({ _id: { $in: post.likes } }).select("userName profilePic");
+
+
+    return res.status(200).json({ likedUsers });
+  } catch (error) {
+    res.status(500).json({ message: "Error getting liked users", error: error.message });
   }
     }
     

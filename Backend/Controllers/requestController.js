@@ -1,4 +1,5 @@
 const Auth = require("../Models/authModel");
+const Notification = require("../Models/notificationModel");
 
 const requestController = {
   sendRequest: async (req, res) => {
@@ -27,6 +28,31 @@ const requestController = {
       if (alreadyRequested) {
         return res.status(400).json({ message: "Request already sent" });
       }
+
+        const sender = await Auth.findById(senderId).select("userName profilePic");
+
+if (receiverId !== senderId) {
+  const newNotification = await Notification.create({
+    senderId,
+    receiverId,
+    type: "friend_request"
+  });
+
+  const receiverSocket = global.users[receiverId];
+
+  if (receiverSocket) {
+    global.io.to(receiverSocket).emit("notification", {
+      _id: newNotification._id,
+      senderId: {
+        userName: sender.userName,
+        profilePic: sender.profilePic
+      },
+      type: "friend_request",
+      message: `${sender.userName} sent you a friend request 🤝`,
+      createdAt: newNotification.createdAt
+    });
+  }
+}
 
       receiver.friendRequests.push({ from: senderId });
 
