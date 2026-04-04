@@ -1,5 +1,5 @@
 const { updateMany } = require("../Models/authModel");
-const Post = require("../Models/PostModel");
+const Post = require("../Models/postModel");
 const User = require("../Models/authModel");
 const Notification = require("../Models/notificationModel");
 
