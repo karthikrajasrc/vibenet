@@ -1,6 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router"
-import Register from "./Pages/register"
-import Login from "./Pages/login"
+import Register from "./Pages/Register"
+import Login from "./Pages/Login"
 import Home from "./Pages/Home"
 import { Toaster } from "react-hot-toast";
 import PublicRoute from "./Routes/publicRoutes";
