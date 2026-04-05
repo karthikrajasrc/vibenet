@@ -1,6 +1,7 @@
 const mongoose = require("mongoose");
 const app = require("./app");
 require("dotenv").config();
+const PORT = process.env.PORT || 5000;
 
 const http = require("http");
 const { Server } = require("socket.io");
@@ -51,8 +52,8 @@ global.users = users;
 mongoose
   .connect(process.env.MONGOOSE_URL)
   .then(() => {
-    server.listen(5000, () => {
-      console.log("Server + Socket running on http://localhost:5000");
+    server.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
     });
   })
   .catch((error) => {
