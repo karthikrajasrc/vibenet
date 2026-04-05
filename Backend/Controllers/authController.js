@@ -47,8 +47,7 @@ const authController = {
             res.cookie("token", Token, {
                 httpOnly: true,
                 secure: process.env.NODE_ENV === "production",
-                sameSite: "None",
-                sameSite: "Lax"
+                sameSite: "None"
             });
 
             res.status(200).json({ message: "login Successfull!", user});
