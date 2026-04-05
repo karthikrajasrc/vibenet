@@ -13,9 +13,10 @@ const upload = require('./Middlewares/upload');
 app.use(cookieParser());
 app.use(express.json());
 app.use("/uploads", express.static("uploads"));
+require('dotenv').config();
 
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: process.env.BASE_URL,
     credentials: true
 }));
 
