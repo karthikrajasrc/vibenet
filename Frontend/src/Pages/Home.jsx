@@ -87,7 +87,7 @@ const handleComment = async (commentId) => {
           return {
             ...post,
             likes: alreadyLiked
-              ? post.likes.filter((id) => id !== userId)
+              ? post.likes.filter((id) => id.toString() !== userId)
               : [...post.likes, userId],
           };
         }
