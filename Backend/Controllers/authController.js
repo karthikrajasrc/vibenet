@@ -42,12 +42,16 @@ const authController = {
                 return res.status(400).json({ message: "incorrect Password!!" });
             }
 
-            const Token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "1d" });
+            const Token = await jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: "3h" });
+
+            const isProduction = process.env.NODE_ENV === "production";
             
             res.cookie("token", Token, {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None"
+  secure: isProduction,
+  sameSite: isProduction ? "None" : "Lax",
+  path: "/",
+  maxAge: 3 * 60 * 60 * 1000
             });
 
             res.status(200).json({ message: "login Successfull!", user});
@@ -75,8 +79,9 @@ const authController = {
         try {
             res.clearCookie("token", {
                 httpOnly: true,
-                secure: true,
-                sameSite: "None",
+  secure: true,
+  sameSite: "None",
+  path: "/"
             });
             res.status(200).json({ message: "Logged out Successfully" });
         }
