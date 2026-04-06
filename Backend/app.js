@@ -16,7 +16,7 @@ app.use("/uploads", express.static("uploads"));
 require('dotenv').config();
 
 app.use(cors({
-    origin: process.env.BASE_URL,
+    origin: ["https://vibeenet.netlify.app", "https://vibeenet.netlify.app/", "http://localhost:5173"],
     credentials: true
 }));
 
