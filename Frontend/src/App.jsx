@@ -13,10 +13,29 @@ import Newpost from "./Pages/Newpost";
 import Search from "./Pages/Request";
 import Request from "./Pages/Request";
 import Message from "./Pages/Message";
+import socket from "./socketio";
+import { useEffect } from "react";
 
 
 
 const App = () => {
+
+  useEffect(() => {
+    socket.connect();
+
+    socket.on("connect", () => {
+      console.log("Connected:", socket.id);
+    });
+
+    socket.on("disconnect", () => {
+      console.log("Disconnected");
+    });
+
+    return () => {
+      socket.disconnect();
+    };
+  }, []);
+
   const router = createBrowserRouter([
     {
       path: "/",
