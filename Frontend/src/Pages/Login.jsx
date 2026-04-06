@@ -23,6 +23,8 @@ const Login = () => {
                 {userName: authForm.userName, passWord: authForm.passWord}
             );
 
+            localStorage.setItem("token", res.data.token);
+
             toast.success(res.data.message);
             console.log(res.data);
             setUser(res.data.user);
@@ -36,13 +38,26 @@ const Login = () => {
     }
 
     const handleforgot = async () => {
-        try {
-            
-        }
-        catch (error) {
-        }
+  try {
+    const res = await instance.put("/auth/update", {
+      userName: forgotForm.userName,
+      newPassword: forgotForm.newPassword,
+      confirmPassword: forgotForm.confirmPassword
+    });
 
-    }
+    toast.success(res.data.message);
+
+
+    setForgotForm({ userName: "", newPassword: "", confirmPassword: "" });
+
+
+    setShowPassword(false);
+
+  } catch (error) {
+    const msg = error.response?.data?.message || "Something went wrong";
+    toast.error(msg);
+  }
+};
 
   return (
       <>
@@ -51,8 +66,8 @@ const Login = () => {
               <h1 className="text-white font-extrabold lg:text-5xl text-3xl">Welcome <span className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent">Back!</span></h1>
               <h2 className="text-white font-semibold lg:text-2xl text-xl m-4"><span className="text-white font-normal text-lg mr-3">Existing User?</span>login Here</h2>
               <form onSubmit={(e) => {e.preventDefault(); handlelogin(); }} className="flex flex-col gap-7 justify-center items-center">
-                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
-                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-65" required/>
+                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-65" required/>
                   <button type="submit" className="border border-amber-400 lg:text-xl text-md bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Login</button>
               </form>
               <div className="flex justify-center items-center gap-10 mt-4">

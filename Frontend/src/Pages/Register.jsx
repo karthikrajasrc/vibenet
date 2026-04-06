@@ -33,9 +33,9 @@ const Register = () => {
               <h1 className="text-white font-extrabold lg:text-5xl text-3xl">Welcome To <span className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent">VibeNet</span></h1>
               <h2 className="text-white font-semibold lg:text-2xl text-xl m-4"><span className="text-white font-normal text-lg mr-3">New User?</span>Register Here</h2>
               <form onSubmit={(e) => {e.preventDefault(); handleregister(); }} className="flex flex-col gap-7 justify-center items-center">
-                  <input type="text" value={authForm.name} onChange={e => setAuthForm({ ...authForm, name: e.target.value })} placeholder="Name" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
-                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
-                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                  <input type="text" value={authForm.name} onChange={e => setAuthForm({ ...authForm, name: e.target.value })} placeholder="Name" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-65" required/>
+                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-65" required/>
+                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-65" required/>
                   <button type="submit" className="border border-amber-400 lg:text-xl text-md bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Register</button>
               </form>
               <p className="text-white">Already have an account? <Link to={"/login"}><span className="underline font-semibold">Login</span></Link></p>
