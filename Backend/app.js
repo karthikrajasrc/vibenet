@@ -31,7 +31,9 @@ app.post("/story/upload", isAuthenticated, upload.single("storyMedia"), (req, re
         url: req.file.path 
     });
 });
-
+app.get("/ping", (req, res) => {
+  res.status(200).send("Server is alive 🚀");
+});
 
 
 
