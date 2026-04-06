@@ -48,16 +48,16 @@ const Login = () => {
       <>
                     <div className="flex flex-col justify-center items-center mt-10 gap-5">
               <img src={logo} alt="Logo VibeNet" className="h-30 w-30 rounded-full shadow-md"/>
-              <h1 className="text-white font-extrabold text-5xl">Welcome <span className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent">Back!</span></h1>
-              <h2 className="text-white font-semibold text-2xl m-4"><span className="text-white font-normal text-lg mr-3">Existing User?</span>login Here</h2>
+              <h1 className="text-white font-extrabold lg:text-5xl text-3xl">Welcome <span className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent">Back!</span></h1>
+              <h2 className="text-white font-semibold lg:text-2xl text-xl m-4"><span className="text-white font-normal text-lg mr-3">Existing User?</span>login Here</h2>
               <form onSubmit={(e) => {e.preventDefault(); handlelogin(); }} className="flex flex-col gap-7 justify-center items-center">
-                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 w-md" required/>
-                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 w-md" required/>
-                  <button type="submit" className="border border-amber-400 text-xl bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Login</button>
+                  <input type="text" value={authForm.userName} onChange={e => setAuthForm({ ...authForm, userName: e.target.value })} placeholder="Username" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                  <input type="password" value={authForm.passWord} onChange={e => setAuthForm({ ...authForm, passWord: e.target.value })} placeholder="Password" className="text-white rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                  <button type="submit" className="border border-amber-400 lg:text-xl text-md bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Login</button>
               </form>
               <div className="flex justify-center items-center gap-10 mt-4">
-                  <p className="text-white">Not yet registered? <Link to={"/"}><span className="underline font-semibold">Register</span></Link></p>
-                  <button className="text-gray-400 cursor-pointer" onClick={() => setShowPassword(true)}>Forgot Password?</button>
+                  <p className="text-white text-[12px] lg:text-[18px]">Not yet registered? <Link to={"/"}><span className="underline font-semibold">Register</span></Link></p>
+                  <button className="text-gray-400 cursor-pointer text-[12px] lg:text-[18px]" onClick={() => setShowPassword(true)}>Forgot Password?</button>
               </div>
           </div>
           {showPassword && (
@@ -69,10 +69,10 @@ const Login = () => {
                           </div>
                           <h2 className="text-2xl font-semibold mb-4">Forgot Password</h2>
                           <form onSubmit={(e) => { e.preventDefault();  handleforgot();}} className="flex flex-col gap-7 justify-center items-center">
-                  <input type="text" value={forgotForm.userName} onChange={e => setForgotForm({ ...forgotForm, userName: e.target.value })} placeholder="Username" className="text-black rounded-lg p-2 border border-gray-700 w-md" required/>
-                              <input type="password" value={forgotForm.newPassword} onChange={e => setForgotForm({ ...forgotForm, newPassword: e.target.value })} placeholder="New Password" className="rounded-lg p-2 border border-gray-700 w-md text-black" required />
-                              <input type="password" value={forgotForm.confirmPassword} onChange={e => setForgotForm({ ...forgotForm, confirmPassword: e.target.value })} placeholder="Confirm Password" className="text-black rounded-lg p-2 border border-gray-700 w-md" required/>
-                              <button type="submit" className="border border-amber-400 text-xl bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Submit</button>
+                  <input type="text" value={forgotForm.userName} onChange={e => setForgotForm({ ...forgotForm, userName: e.target.value })} placeholder="Username" className="text-black rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                              <input type="password" value={forgotForm.newPassword} onChange={e => setForgotForm({ ...forgotForm, newPassword: e.target.value })} placeholder="New Password" className="rounded-lg p-2 border border-gray-700 lg:w-md w-s text-black" required />
+                              <input type="password" value={forgotForm.confirmPassword} onChange={e => setForgotForm({ ...forgotForm, confirmPassword: e.target.value })} placeholder="Confirm Password" className="text-black rounded-lg p-2 border border-gray-700 lg:w-md w-s" required/>
+                              <button type="submit" className="border border-amber-400 lg:text-xl text-md bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent w-25 px-2 py-1 rounded-2xl text-center font-semibold">Submit</button>
               </form>
                       </div>
                   </div>

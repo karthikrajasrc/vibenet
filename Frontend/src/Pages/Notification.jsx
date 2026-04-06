@@ -51,7 +51,7 @@ useEffect(() => {
   
   return (
       <>
-          <h1 className="text-white text-2xl mt-2 mb-10"> <span><FontAwesomeIcon icon={faBell} /> </span>Notifications</h1>
+          <h1 className="text-white lg:text-2xl text-lg mt-2 mb-10"> <span><FontAwesomeIcon icon={faBell} /> </span>Notifications</h1>
           <div>
   {notifications.map((n, index) => (
     <div key={index} className="flex items-center gap-3 bg-gray-800 text-white p-3 my-2 rounded-lg">

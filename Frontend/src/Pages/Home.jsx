@@ -350,11 +350,11 @@ formData.append("storyMedia", file);
 
   return (
       <>
-          <h1 className="text-white font-bold text-3xl">Stories</h1>
-         <div className="flex gap-5 overflow-x-auto">
+          <h1 className="text-white font-bold text-xl lg:text-3xl mt-5">Stories</h1>
+         <div className="flex gap-2 lg:gap-5 overflow-x-auto">
 
   {/* ADD STORY BUTTON */}
-  <div className="flex flex-col items-center cursor-pointer my-4 ml-10">
+  <div className="flex flex-col items-center cursor-pointer my-4 lg:ml-10 justify-center">
     <label onClick={() => setShowAddStory(true)} className="h-12 w-12 rounded-full bg-[#EA5415] flex items-center justify-center text-white text-2xl cursor-pointer">
       +
     </label>
@@ -434,17 +434,24 @@ formData.append("storyMedia", file);
   {/* EXISTING STORIES */}
   {Object.values(groupedStories).length > 0 ? (
     Object.values(groupedStories).map((userStories, i) => (
-      <div key={i} onClick={() => {
-        setCurrentStories(userStories);
-        setCurrentIndex(0);
-        setShowStory(true);
-      }} className="mt-2 ml-2">
-        <img
-          src={userStories[0]?.userId?.profilePic || userimage}
-          className="h-15 w-15 rounded-full border-2 border-pink-500"
-        />
-        <p className="text-white text-center">{userStories[0]?.userId?.userName}</p>
-      </div>
+      <div
+  key={i}
+  onClick={() => {
+    setCurrentStories(userStories);
+    setCurrentIndex(0);
+    setShowStory(true);
+  }}
+  className="mt-2 lg:ml-2 flex flex-col w-17.5 shrink-0 text-center justify-center items-center cursor-pointer"
+>
+  <img
+    src={userStories[0]?.userId?.profilePic || userimage}
+    className="h-15 w-15 rounded-full border-2 border-pink-500 object-cover"
+  />
+
+  <p className="text-white text-center text-xs truncate w-full">
+    {userStories[0]?.userId?.userName}
+  </p>
+</div>
     ))
   ) : (
     <p className="text-white">No stories</p>
@@ -489,17 +496,17 @@ formData.append("storyMedia", file);
   </div>
 )}
           <div>
-              <h2 className="text-white font-bold text-3xl">Posts</h2>
+              <h2 className="text-white font-bold text-xl lg:text-3xl">Posts</h2>
           </div>
-      <div className="flex flex-row gap-5">
-        <div className="flex-1">
+      <div className="flex flex-row lg:gap-5 gap-2">
+        <div className="lg:flex-1">
               {
                   posts.map((post) => (
-  <div key={post._id} className="mt-15 ml-20">
+  <div key={post._id} className="lg:mt-15 mt-5 lg:ml-20 ml-5">
     <div className="flex items-center gap-3">
       <img 
         src={post.userId?.profilePic || userimage} 
-        className="h-12 w-12 rounded-full border-2 border-[#EA5415]"
+        className="lg:h-12 lg:w-12 h-8 w-8 rounded-full border-2 border-[#EA5415]"
       />
 
       <h3 className="text-white font-semibold">
@@ -508,29 +515,29 @@ formData.append("storyMedia", file);
     </div>
                           <div className="bg-gray-900 max-w-xl flex flex-col justify-center items-center rounded-3xl mt-3">
                               {post.text && (
-      <p className="text-white font-semibold mt-2 pt-4 text-center">
+      <p className="text-white font-semibold text-[13px] lg:text-[18px] mt-2 pt-4 text-center">
         {post.text}
       </p>
     )}
     {post.image && (
       <img 
         src={post.image} 
-        className="h-80 w-80 rounded-md mt-2"
+        className="lg:h-80 lg:w-80 w-40 h-40 rounded-md mt-2"
       />
     )}
     {post.video && (
       <video 
         src={post.video} 
         controls 
-        className="h-100 w-150 rounded-md mt-2"
+        className="lg:h-100 lg:w-150 h-70 w-90 rounded-md mt-2"
       />
                               )}
                               <div className="my-5">
                                   <button onClick={() => handleLikes(post._id)} className="cursor-pointer"><FontAwesomeIcon 
   icon={post.likes.includes(user._id) ? faHeartSolid : faHeart} 
-  className={post.likes.includes(user._id) ? "text-red-500 text-2xl" : "text-white text-2xl"} 
-/><span className="text-[#EA5415] text-2xl ml-1 mr-4">{post.likes.length }</span></button>
-                          <button onClick={() => { setShowComment(true); setPostId(post._id); handleFetchComments(post._id); }} className="cursor-pointer"><FontAwesomeIcon icon={faComment} className="text-white text-2xl" /><span className="text-[#EA5415] text-2xl ml-1 mr-4">{post.comment?.length || 0}</span></button>
+  className={post.likes.includes(user._id) ? "text-red-500 lg:text-2xl text-md" : "text-white lg:text-2xl text-md"} 
+/><span className="text-[#EA5415] lg:text-2xl text-md ml-1 mr-4">{post.likes.length }</span></button>
+                          <button onClick={() => { setShowComment(true); setPostId(post._id); handleFetchComments(post._id); }} className="cursor-pointer"><FontAwesomeIcon icon={faComment} className="text-white lg:text-2xl text-md" /><span className="text-[#EA5415] lg:text-2xl text-md ml-1 mr-4">{post.comment?.length || 0}</span></button>
                           <span className="text-gray-500 underline cursor-pointer ml-5" onClick={() => { setShowLikedby(true); handleFetchLikedBy(post._id);}}>Liked By?</span>
                         </div>
                         

@@ -296,21 +296,21 @@ const handlePostUpdate = async (id) => {
 
   return (
     <div>
-          <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold text-3xl ml-10 mb-4 ">{user.userName}</h1>
+          <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold text-2xl lg:text-3xl lg:ml-10 mt-5 mb-4 ">{user.userName}</h1>
           <div className="relative">
-              <img src={user.coverPic || nocover} alt="Cover Image" className="h-40 w-full bg-white" />
-              <button onClick={() => setShowupdateCoverimage(true)} className="text-black absolute top-6 right-10 shadow-2xl cursor-pointer"><FontAwesomeIcon icon={faPen} /> Update Cover Photo</button>
+              <img src={user.coverPic || nocover} alt="Cover Image" className="lg:h-40 h-25 w-full bg-white" />
+              <button onClick={() => setShowupdateCoverimage(true)} className="text-black absolute top-6 right-10 shadow-2xl cursor-pointer text-[15px]"><FontAwesomeIcon icon={faPen} /> Update Cover Photo</button>
 
                {
               showupdateCoverimage && (
                  < div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
-                          <div className="bg-white rounded-lg p-8">
+                          <div className="bg-white rounded-lg lg:p-8 p-1 w-75 lg:w-100">
                                <div className="flex justify-end">
                               <span onClick={() => setShowupdateCoverimage(false)} className="text-black text-2xl pb-3 cursor-pointer"><FontAwesomeIcon icon={faTimes} /></span>
                           </div>
                               <input type="file" onChange={handleCoverChange} />
                               {imageSrc && (
-  <div className="relative w-full max-w-150 h-75 mt-4">
+  <div className="relative w-70 h-75 mt-4">
     <Cropper
       image={imageSrc}
       crop={crop}
@@ -323,7 +323,7 @@ const handlePostUpdate = async (id) => {
     />
   </div>
 )}
-                              <button onClick={handleupdateCover} className="cursor-pointer bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold border border-gray-400 rounded-4xl py-2 px-4">Update</button>
+                              <button onClick={handleupdateCover} className="cursor-pointer bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold border border-gray-400 rounded-4xl py-2 px-4 mt-2">Update</button>
                               </div>
                   </div>
               )
@@ -346,19 +346,19 @@ const handlePostUpdate = async (id) => {
 )}
               
 
-              <img src={user.profilePic || userimage} alt="User Image" className="absolute top-20 h-30 w-30 rounded-full ml-15 border-gray-400 border shadow-3xl" />
-          <button onClick={() => setShowUpdateProfileimage(true)} className="text-white mt-15 ml-10 cursor-pointer"><FontAwesomeIcon icon={faPen} /> Update Profile Photo</button>
+              <img src={user.profilePic || userimage} alt="User Image" className="absolute top-20 lg:h-30 lg:w-30 h-20 w-20 rounded-full lg:ml-15 ml-5 border-gray-400 border shadow-3xl" />
+          <button onClick={() => setShowUpdateProfileimage(true)} className="text-white mt-16 lg:ml-10 ml-5 cursor-pointer text-[13px]"><FontAwesomeIcon icon={faPen} /> Update Profile Photo</button>
           </div>
           {
               showUpdateProfileimage && (
                  < div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
-                          <div className="bg-white rounded-lg p-8">
+                          <div className="bg-white rounded-lg lg:p-8 p-1 w-75 lg:w-100" >
                                <div className="flex justify-end">
                               <span onClick={() => setShowUpdateProfileimage(false)} className="text-black text-2xl pb-3 cursor-pointer"><FontAwesomeIcon icon={faTimes} /></span>
                           </div>
                               <input type="file" onChange={handleprofileChange} />
                               {imageSrc && (
-  <div className="relative w-75 h-75 mt-4">
+  <div className="relative w-50 h-50 mt-4">
     <Cropper
       image={imageSrc}
       crop={crop}
@@ -370,19 +370,19 @@ const handlePostUpdate = async (id) => {
     />
   </div>
 )}
-                              <button onClick={handleupdateprof} className="cursor-pointer bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold border border-gray-400 rounded-4xl py-2 px-4">Update</button>
+                              <button onClick={handleupdateprof} className="cursor-pointer bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-semibold border border-gray-400 rounded-4xl py-2 px-4 mt-2">Update</button>
                               </div>
                   </div>
               )
         }
-          <div className="flex justify-evenly items-start w-full text-center mt-10 gap-15">
+          <div className="flex flex-col md:flex-row lg:flex-row justify-evenly items-start w-full text-center mt-10 lg:gap-15 gap-7">
               <div className="flex-1 flex flex-col border border-gray-400 rounded-4xl py-5 text-left">
-                  <h2 className="text-2xl font-semibold text-gray-500 flex justify-evenly mt-2 text-left px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">Username: <span className="text-white text-xl">{user.userName}</span></h2>
-                  <h2 className="text-2xl font-semibold text-gray-500 flex justify-evenly mt-2 text-left px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">Name: <span className="text-white text-xl">{user.name}</span></h2>
-                  <h2 className="text-2xl font-semibold text-gray-500 flex justify-evenly mt-2 text-left px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">Bio: <span className="text-white text-xl">{user.bio ? user.bio : "No bio"}</span></h2>
-                  <h2 className="text-2xl font-semibold text-gray-500 flex justify-evenly mt-2 px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">Location: <span className= "text-white text-xl">{user.location ? user.location : "No location"}</span></h2>
-          <h2 className="text-2xl font-semibold text-gray-500 flex justify-evenly mt-2 px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">Website: <span className="text-white text-xl">{user.website ? user.website : "No website"}</span></h2>
-          <button onClick={() => setShowUpdate(true)} className="cursor-pointer mx-auto mt-5 border border-amber-400 text-lg bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent px-4 py-1 rounded-2xl font-semibold"><FontAwesomeIcon icon={faPen} className="text-white" /> Update</button>
+                  <h2 className="lg:text-2xl text-s font-semibold text-gray-500 flex justify-evenly mt-2 text-left lg:px-5 px-2 lg:mx-5 mx-2 py-1 border border-gray-400 rounded-2xl bg-gray-900">Username: <span className="text-white lg:text-xl text-md">{user.userName}</span></h2>
+                  <h2 className="lg:text-2xl text-s font-semibold text-gray-500 flex justify-evenly mt-2 text-left lg:px-5 px-2 lg:mx-5 mx-2 py-1 border border-gray-400 rounded-2xl bg-gray-900">Name: <span className="text-white lg:text-xl text-md">{user.name}</span></h2>
+                  <h2 className="lg:text-2xl text-s font-semibold text-gray-500 flex justify-evenly mt-2 text-left lg:px-5 px-2 lg:mx-5 mx-2 py-1 border border-gray-400 rounded-2xl bg-gray-900">Bio: <span className="text-white lg:text-xl text-md">{user.bio ? user.bio : "No bio"}</span></h2>
+                  <h2 className="lg:text-2xl text-s font-semibold text-gray-500 flex justify-evenly mt-2 lg:px-5 px-2 lg:mx-5 mx-2 py-1 border border-gray-400 rounded-2xl bg-gray-900">Location: <span className= "text-white lg:text-xl text-md">{user.location ? user.location : "No location"}</span></h2>
+          <h2 className="lg:text-2xl text-s font-semibold text-gray-500 flex justify-evenly mt-2 lg:px-5 px-2 lg:mx-5 mx-2 py-1 border border-gray-400 rounded-2xl bg-gray-900">Website: <span className="text-white lg:text-xl text-md">{user.website ? user.website : "No website"}</span></h2>
+          <button onClick={() => setShowUpdate(true)} className="cursor-pointer mx-auto mt-5 border border-amber-400 text-sm lg:text-lg bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent px-4 py-1 rounded-2xl font-semibold"><FontAwesomeIcon icon={faPen} className="text-white" /> Update</button>
         </div>
         
         {
@@ -403,25 +403,25 @@ const handlePostUpdate = async (id) => {
           </div>
         )}
               <div className="flex-1 flex flex-col border border-gray-400 rounded-4xl py-5">
-                  <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text mb-3 text-transparent font-semibold text-3xl">Friends</h2>
+                  <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text mb-3 text-transparent font-semibold lg:text-3xl text-xl">Friends</h2>
                   {friends.map((friend) => (
-                      <div key={friend._id} className="flex items-center mb-4 px-5 mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">
-                          <img src={friend.profilePic || userimage} alt="Friend Image" className="h-10 w-10 rounded-full mr-2" />
+                      <div key={friend._id} className="flex items-center mb-4 px-5 mx-2 lg:mx-5 py-1 border border-gray-400 rounded-2xl bg-gray-900">
+                          <img src={friend.profilePic || userimage} alt="Friend Image" className="lg:h-10 h-8 w-8 lg:w-10 rounded-full mr-2" />
                           <div className="flex justify-between items-center w-full">
                               <div className="ml-2">
-                              <h3 className="text-white font-semibold text-lg">{friend.userName}</h3>
-                              <p className="text-gray-500 text-sm">{friend.name}</p>
+                              <h3 className="text-white font-semibold lg:text-lg text-sm">{friend.userName}</h3>
+                              <p className="text-gray-500 lg:text-sm text-xs">{friend.name}</p>
                               </div>
-                              <div className="flex gap-5">
+                              <div className="flex lg:gap-5 gap-2">
                           <div className="relative group">
-                            <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white text-2xl"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
+                            <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white lg:text-2xl text-md"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
                             <span className="absolute left-0 -top-3.5 -translate-y-1/2 bg-white text-black text-sm px-2 py-1 rounded 
   opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap">
     Message
   </span>
                           </div>
                           <div className="relative group">
-                            <button className="cursor-pointer" onClick={() => { setViewProfile(true); setSelectedFriend(friend); }}><span className="text-white text-2xl"><FontAwesomeIcon icon={faUser} /></span></button>
+                            <button className="cursor-pointer" onClick={() => { setViewProfile(true); setSelectedFriend(friend); }}><span className="text-white lg:text-2xl text-md"><FontAwesomeIcon icon={faUser} /></span></button>
                             <span className="absolute left-0 -top-3.5 -translate-y-1/2 bg-white text-black text-sm px-2 py-1 rounded 
   opacity-0 group-hover:opacity-100 transition duration-200 whitespace-nowrap">
     View Profile
@@ -432,26 +432,26 @@ const handlePostUpdate = async (id) => {
                       {
                           viewProfile && (
                               <div className="fixed inset-0 z-50 flex items-center justify-center backdrop-blur-sm bg-black/30">
-                                  <div className="bg-white rounded-lg p-8">
+                                  <div className="bg-white rounded-lg lg:p-8 p-2">
                                       <div className="flex justify-end">
                                           <span onClick={() => setViewProfile(false)} className="text-black text-2xl pb-3 cursor-pointer"><FontAwesomeIcon icon={faTimes} /></span>
                                       </div>
-                              <div className="flex items-center mb-4 px-5 mx-5 py-1 border border-gray-400 rounded-2xl  bg-gray-900 relative">
-                                <img src={selectedFriend.coverPic || nocover} alt="Cover Image" className="h-20 w-120 bg-white rounded-2xl" />
-                                <img src={selectedFriend.profilePic || userimage} alt="Friend Image" className="h-18 w-18 rounded-full mr-5 absolute top-15 ml-5" />
+                              <div className="flex items-center mb-4 px-5 lg:mx-5 py-1 border border-gray-400 rounded-2xl  bg-gray-900 relative">
+                                <img src={selectedFriend.coverPic || nocover} alt="Cover Image" className="lg:h-20 lg:w-120 h-15 w-45 bg-white rounded-2xl" />
+                                <img src={selectedFriend.profilePic || userimage} alt="Friend Image" className="lg:h-18 lg:w-18 h-14 w-14 rounded-full mr-5 absolute lg:top-15 top-10 ml-5" />
                                           <div className="flex justify-evenly items-center w-full">
                                               <div className="ml-2">
-                                                  <h3 className=" font-semibold text-2xl text-white">{selectedFriend.userName}</h3>
+                                                  <h3 className=" font-semibold lg:text-2xl text-md text-white">{selectedFriend.userName}</h3>
                                     <p className="text-gray-500 text-md">{selectedFriend.name}</p>
                                     
                                   </div>
-                                  <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white text-2xl"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
+                                  <Link to={"/home/message"} ><button className="cursor-pointer"><span className="text-white lg:text-2xl text-xl ml-2"><FontAwesomeIcon icon={faPaperPlane} /></span></button></Link>
                                           </div>
                               </div>
                               <div className="bg-black/30 mt-15 rounded-2xl flex flex-col p-5">
-                                <h2 className="text-black">Bio: <span className="font-semibold text-[22px]">{selectedFriend.bio || "No Bio"}</span></h2>
-                                <h2 className="text-black">Location: <span className="font-semibold text-[22px]">{selectedFriend.location || "No Location"}</span></h2>
-                                <h2>Website: <span className="font-semibold text-[22px]">{selectedFriend.website || "No Website"}</span></h2>
+                                <h2 className="text-black">Bio: <span className="font-semibold lg:text-[22px] text-[18px]">{selectedFriend.bio || "No Bio"}</span></h2>
+                                <h2 className="text-black">Location: <span className="font-semibold lg:text-[22px] text-[18px]">{selectedFriend.location || "No Location"}</span></h2>
+                                <h2>Website: <span className="font-semibold lg:text-[22px] text-[18px]">{selectedFriend.website || "No Website"}</span></h2>
                               </div>
                                   </div>
                               </div>
@@ -462,11 +462,14 @@ const handlePostUpdate = async (id) => {
               </div>
       </div>
       <div className="mt-10">
-        <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text mb-3 text-transparent font-semibold text-3xl">Posts</h2>
-        <div className="grid grid-cols-3 gap-2 px-2">
+        <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text mb-3 text-transparent font-semibold lg:text-3xl text-2xl">Posts</h2>
+        {posts.length === 0 ? (
+          <h2 className="text-white font-semibold lg:text-2xl text-md">No posts yet</h2>
+        ) : (
+          <div className="md:grid lg:grid-cols-3 md:grid-cols-2 flex flex-col gap-2 px-2">
                       {
                           posts.map((post) => (
-          <div key={post._id} className="mt-10 ml-20">
+          <div key={post._id} className="lg:mt-10 mt-5 lg:ml-20">
                               <div className="bg-gray-900 max-w-xl flex flex-col justify-center items-center rounded-3xl mt-3 h-full">
                                 <div className="flex justify-end right-0">
                                   <button className="text-white text-lg" onClick={() => { setShowUpdatePost(true); setSelectedPost(post); setUpdateFile(null);   
@@ -561,13 +564,14 @@ const handlePostUpdate = async (id) => {
               <video 
                 src={post.video} 
                 controls 
-                className="h-50 w-90 rounded-md mt-2"
+                className="h-50 lg:w-90 w-90 rounded-md mt-2"
               />
                                       )}
                                   </div>
           </div>
           ))}
         </div>
+        )}
       </div>
       
     </div>

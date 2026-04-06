@@ -28,20 +28,20 @@ const Navbar = () => {
     }
   return (
       <>
-        <div className="fixed top-0 left-0 w-full h-16 bg-black flex items-center px-10 z-20 pt-4">
+        <div className="fixed top-0 left-0 w-full h-16 bg-black flex items-center lg:px-10 z-20 pt-4">
     
     <div className="flex-1 flex justify-center">
-      <img src={logo} alt="logo" className="h-17 w-17" />
+      <img src={logo} alt="logo" className="lg:h-17 lg:w-17 h-13 w-13" />
     </div>
 
     <div className="flex-1 flex justify-center">
-      <h1 className="text-white text-xl">
+      <h1 className="text-white lg:text-xl text-s">
         Hey! <span className="font-semibold">{user ? user.name : "Guest"}</span>
       </h1>
     </div>
 
     <div className="flex-1 flex justify-center">
-      <img src={user ? user.profilePic : userimage} alt="profile" className="h-12 w-12 rounded-full" />
+      <img src={user?.profilePic || userimage} alt="profile" className="h-12 w-12 rounded-full" />
     </div>
 
   </div>

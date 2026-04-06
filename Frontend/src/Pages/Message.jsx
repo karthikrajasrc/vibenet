@@ -3,6 +3,8 @@ import { AuthContext } from "../../authProvider"
 import instance from "../ProtectedInstances/axios";
 import userimage from "../Images/userimage.svg"
 import socket from "../socketio";
+import { faTimes } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
 const Message = () => {
 
@@ -11,7 +13,7 @@ const Message = () => {
   const [selectedUser, setSelectedUser] = useState(null);
   const [messages, setMessages] = useState([]);
   const [message, setMessage] = useState("");
-    
+    const [showChat, setShowChat] = useState(false);
   useEffect(() => {
 
     const fetchFriends = async () => {
@@ -90,32 +92,51 @@ const handleSend = async () => {
   return (
     <>
       <div>
-      <h1 className="text-white text-3xl font-bold">Messages</h1>
+      <h1 className="text-white lg:text-3xl text-2xl font-bold">Messages</h1>
       </div>
       <div className="flex flex-row">
         <div className="mt-5 flex-1">
           <div>
-            <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent py-4 text-2xl">Friends</h2>
+            <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent py-4 text-xl lg:text-2xl">Friends</h2>
           </div>
           {
             friends.map((friend) => (
-              <div key={friend._id} onClick={() => setSelectedUser(friend)} className="px-4 py-2 border border-gray-700 my-2 cursor-pointer bg-gray-900 rounded-2xl">
-                <div className="flex items-center gap-5">
-                  <img src={friend.profilePic || userimage} alt="profile" className="h-10 w-10 rounded-full" />
-                  <h1 className="text-white text-xl">{friend.userName}</h1>
+              <div key={friend._id} onClick={() => {setSelectedUser(friend); setShowChat(true); }} className="lg:px-4 px-2 py-2 border border-gray-700 my-2 cursor-pointer bg-gray-900 rounded-2xl">
+                <div className="flex items-center lg:gap-5 md:gap-4 gap-1">
+                  <img src={friend.profilePic || userimage} alt="profile" className="lg:h-10 lg:w-10 h-8 w-8 rounded-full" />
+                  <h1 className="text-white lg:text-xl text-md">{friend.userName}</h1>
                 </div>
                 
               </div>
             ))
           }
         </div>
-        <div className="flex-3 p-4">
+        <div
+  className={`
+    ${showChat ? "flex" : "hidden"} 
+    lg:flex-3
+    flex-col 
+    fixed lg:static 
+    top-0 left-0 
+    w-full h-full 
+    lg:h-auto lg:w-1/3 
+    bg-black lg:bg-transparent 
+    z-50 lg:z-0 
+    p-4
+  `}
+>
   {
     selectedUser ? (
       <div>
         <h2 className="text-white text-xl mb-4">
           Chat with <span className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent font-bold">{selectedUser.userName}</span>
-        </h2>
+                </h2>
+                <button
+    className="lg:hidden text-white text-xl absolute top-4 right-4"
+    onClick={() => setShowChat(false)}
+  >
+    <FontAwesomeIcon icon={faTimes} />
+  </button>
 
        <div className="h-100 overflow-y-auto p-2 bg-gray-900 rounded-xl">
   {
@@ -148,7 +169,7 @@ const handleSend = async () => {
         </div>
       </div>
     ) : (
-      <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text text-transparent py-4 text-2xl">Start a conversation!</h2>
+      <h2 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] lg:block hidden bg-clip-text text-transparent py-4 text-2xl">Start a conversation!</h2>
     )
   }
 </div>

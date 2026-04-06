@@ -101,11 +101,11 @@ useEffect(() => {
 
   return (
       <>
-          <div className="flex justify-center items-center text-center gap-10">
+          <div className="flex md:flex-row flex-col justify-center items-center text-center gap-10">
               <div className="flex-1 bg-gray-900 rounded-2xl h-full pb-10">
-                  <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text pt-5 text-transparent font-semibold text-3xl">Search Friends!</h1>
+                  <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text pt-5 text-transparent font-semibold lg:text-3xl text-xl">Search Friends!</h1>
                   <div className="flex flex-row gap-2 justify-center items-center">
-                      <input type="text" value={searchtext} onChange={e => setSearchtext(e.target.value)} placeholder="Search..." className="text-white rounded-lg p-2 mt-5 border border-gray-700 w-md" required />
+                      <input type="text" value={searchtext} onChange={e => setSearchtext(e.target.value)} placeholder="Search..." className="text-white rounded-lg p-2 mt-5 border border-gray-700 lg:w-md w-50" required />
                       <span className="bg-[#EA5415] px-1 py-2 text-xl rounded-lg mt-5"><FontAwesomeIcon icon={faSearch} /> </span>
                   </div>
                   <div className="mt-7">
@@ -114,21 +114,21 @@ useEffect(() => {
   const isFriend = (user?.friends || []).includes(u._id.toString());
 
   return (
-    <div key={u._id} className="border border-gray-600 rounded-2xl mx-5 px-5 py-2 mt-2">
+    <div key={u._id} className="border border-gray-600 rounded-2xl lg:mx-5 mx-2 lg:px-5 px-2 py-2 mt-2">
       
       <div className="flex flex-row justify-between">
 
-        <div className="flex flex-row gap-5">
-          <img src={u.profilePic || userimage} className="w-10 h-10 rounded-full" />
+        <div className="flex flex-row lg:gap-5 gap-2">
+          <img src={u.profilePic || userimage} className="lg:w-10 lg:h-10 w-8 h-8 rounded-full" />
           
           <div className="flex flex-col text-left">
-            <h1 className="text-white">{u.userName}</h1>
-            <h2 className="text-gray-500">{u.name}</h2>
+            <h1 className="text-white text-[12px] lg:text-lg">{u.userName}</h1>
+            <h2 className="text-gray-500 text-[12px] lg:text-lg">{u.name}</h2>
           </div>
         </div>
 
-        <div className="mt-2 mr-5">
-          <span className="text-white text-2xl">
+        <div className="mt-2 lg:mr-5">
+          <span className="text-white lg:text-2xl text-md">
   {isFriend ? (
     <FontAwesomeIcon icon={faUserCheck} className="text-green-700" />
   ) : (
@@ -145,23 +145,23 @@ useEffect(() => {
                       }
                   </div>
               </div>
-              <div className="flex-1 bg-gray-900 rounded-2xl max-h-full">
-                  <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text py-5 text-transparent font-semibold text-3xl">Requests</h1>
+              <div className="flex-1 bg-gray-900 rounded-2xl max-h-full w-full">
+                  <h1 className="bg-linear-to-r from-[#F68D17] to-[#EA5415] bg-clip-text py-5 text-transparent font-semibold lg:text-3xl text-xl">Requests</h1>
                   <div>
                       {
                           receivedRequests.length === 0 ? (
-                              <h1 className="text-white text-2xl pb-4">No Requests</h1>
+                              <h1 className="text-white lg:text-2xl text-lg pb-4">No Requests</h1>
                           ) : (
                               receivedRequests.map((req) => {
   const sender = req.from;
 
   return (
-    <div key={req._id} className="border border-gray-600 rounded-2xl mx-5 px-5 py-2 my-5">
+    <div key={req._id} className="border border-gray-600 rounded-2xl lg:mx-5 mx-2 lg:px-5 px-2 py-2 my-5">
       
       <div className="flex flex-row justify-between">
 
-        <div className="flex flex-row gap-5">
-          <img src={sender.profilePic || userimage} className="w-10 h-10 rounded-full" />
+        <div className="flex flex-row lg:gap-5 gap-5 justify-center items-center">
+          <img src={sender.profilePic || userimage} className="lg:w-10 lg:h-10 w-8 h-8 rounded-full" />
           
           <div className="flex flex-col text-left">
             <h1 className="text-white">{sender.userName}</h1>
@@ -169,7 +169,7 @@ useEffect(() => {
           </div>
         </div>
 
-        <div className="mt-2 mr-5 flex gap-3">
+        <div className="mt-2 lg:mr-5 mr-2 flex gap-3">
           <button onClick={() => handleAccept(sender._id)}>
             <FontAwesomeIcon icon={faUserCheck} className="text-green-600 text-xl" />
           </button>
