@@ -46,15 +46,12 @@ const authController = {
 
             const isProduction = process.env.NODE_ENV === "production";
             
-            res.cookie("token", Token, {
-                httpOnly: true,
-  secure: isProduction,
-  sameSite: isProduction ? "None" : "Lax",
-  path: "/",
-  maxAge: 3 * 60 * 60 * 1000
-            });
+            res.status(200).json({ 
+  message: "login Successfull!", 
+  user,
+  token: Token
+});
 
-            res.status(200).json({ message: "login Successfull!", user});
         }
         catch (error) {
             res.status(500).json({ message: "Error logging in user", error: error.message });
@@ -77,12 +74,7 @@ const authController = {
     },
     logoutUser: async (req, res) => { 
         try {
-            res.clearCookie("token", {
-                httpOnly: true,
-  secure: true,
-  sameSite: "None",
-  path: "/"
-            });
+
             res.status(200).json({ message: "Logged out Successfully" });
         }
         catch (error) {

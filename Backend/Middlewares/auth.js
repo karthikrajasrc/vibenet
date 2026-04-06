@@ -4,11 +4,14 @@ require("dotenv").config();
 const auth = {
   isAuthenticated: (req, res, next) => {
     try {
-      const token = req.cookies?.token;
+      const authHeader = req.headers.authorization;
 
-      if (!token) {
-        return res.status(401).json({ message: "No token, Unauthorized" });
-      }
+if (!authHeader) {
+  return res.status(401).json({ message: "No token, Unauthorized" });
+}
+
+const token = authHeader.split(" ")[1];
+
 
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
